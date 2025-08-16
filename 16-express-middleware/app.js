@@ -1,17 +1,25 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const expressLayout = require('express-ejs-layouts')
+const expressLayout = require('express-ejs-layouts');
+const morgan = require('morgan');
+
 
 app.set('view engine', 'ejs');
+//third party middleware
 app.use(expressLayout);
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    console.log([req.url, Date.now() - start, 'ms'].join(' '));
-  });
+app.use(morgan('dev'));
+
+///built in middleware
+app.use(express.static('public'))
+
+//application level middleware
+app.use((req,res, next)=>{
+  console.log(Date.now(), req.url);
   next();
-})
+});
+
+
 
 app.get('/', (req, res) => {
   let mahasiswa = [
@@ -33,13 +41,11 @@ app.get('/', (req, res) => {
 app.get('/contact', (req, res) => {
   res.render('contact', { layout: 'layouts/main-layout.ejs', title: 'Contect Page' });
 });
-
 app.get('/about', (req, res) => {
   res.render('about', { layout: 'layouts/main-layout.ejs', title: 'About Page' });
 });
 
 const mahasiswa = require('./mahasiswa.json');
-
 app.get('/mahasiswa/:id', (req, res) => {
   const id = Number(req.params.id);
   const search = mahasiswa.find(m => m.id === id);
