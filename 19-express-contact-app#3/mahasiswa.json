@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "nama": "Andi Pratama",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2022,
+    "email": "andi.pratama@example.com"
+  },
+  {
+    "id": 2,
+    "nama": "Budi Santoso",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2021,
+    "email": "budi.santoso@example.com"
+  },
+  {
+    "id": 3,
+    "nama": "Citra Lestari",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2023,
+    "email": "citra.lestari@example.com"
+  },
+  {
+    "id": 4,
+    "nama": "Dewi Fitriani",
+    "jurusan": "Akuntansi",
+    "angkatan": 2022,
+    "email": "dewi.fitriani@example.com"
+  },
+  {
+    "id": 5,
+    "nama": "Eka Saputra",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2021,
+    "email": "eka.saputra@example.com"
+  },
+  {
+    "id": 6,
+    "nama": "Fahmi Hidayat",
+    "jurusan": "Hukum",
+    "angkatan": 2023,
+    "email": "fahmi.hidayat@example.com"
+  },
+  {
+    "id": 7,
+    "nama": "Galih Wicaksono",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2022,
+    "email": "galih.wicaksono@example.com"
+  },
+  {
+    "id": 8,
+    "nama": "Hana Salsabila",
+    "jurusan": "Kedokteran",
+    "angkatan": 2021,
+    "email": "hana.salsabila@example.com"
+  },
+  {
+    "id": 9,
+    "nama": "Iqbal Ramadhan",
+    "jurusan": "Farmasi",
+    "angkatan": 2023,
+    "email": "iqbal.ramadhan@example.com"
+  },
+  {
+    "id": 10,
+    "nama": "Joko Susilo",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2022,
+    "email": "joko.susilo@example.com"
+  },
+  {
+    "id": 11,
+    "nama": "Kartika Putri",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2021,
+    "email": "kartika.putri@example.com"
+  },
+  {
+    "id": 12,
+    "nama": "Lukman Hakim",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2023,
+    "email": "lukman.hakim@example.com"
+  },
+  {
+    "id": 13,
+    "nama": "Maya Rahmawati",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2022,
+    "email": "maya.rahmawati@example.com"
+  },
+  {
+    "id": 14,
+    "nama": "Naufal Ardhi",
+    "jurusan": "Akuntansi",
+    "angkatan": 2021,
+    "email": "naufal.ardhi@example.com"
+  },
+  {
+    "id": 15,
+    "nama": "Olivia Wijaya",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2023,
+    "email": "olivia.wijaya@example.com"
+  },
+  {
+    "id": 16,
+    "nama": "Putra Negara",
+    "jurusan": "Hukum",
+    "angkatan": 2022,
+    "email": "putra.negara@example.com"
+  },
+  {
+    "id": 17,
+    "nama": "Qori Syahputra",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2021,
+    "email": "qori.syahputra@example.com"
+  },
+  {
+    "id": 18,
+    "nama": "Rina Amalia",
+    "jurusan": "Kedokteran",
+    "angkatan": 2023,
+    "email": "rina.amalia@example.com"
+  },
+  {
+    "id": 19,
+    "nama": "Santi Kurnia",
+    "jurusan": "Farmasi",
+    "angkatan": 2022,
+    "email": "santi.kurnia@example.com"
+  },
+  {
+    "id": 20,
+    "nama": "Taufik Hidayat",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2021,
+    "email": "taufik.hidayat@example.com"
+  },
+  {
+    "id": 21,
+    "nama": "Umar Fadilah",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2023,
+    "email": "umar.fadilah@example.com"
+  },
+  {
+    "id": 22,
+    "nama": "Vina Octavia",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2022,
+    "email": "vina.octavia@example.com"
+  },
+  {
+    "id": 23,
+    "nama": "Wawan Setiawan",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2021,
+    "email": "wawan.setiawan@example.com"
+  },
+  {
+    "id": 24,
+    "nama": "Yuni Puspita",
+    "jurusan": "Akuntansi",
+    "angkatan": 2023,
+    "email": "yuni.puspita@example.com"
+  },
+  {
+    "id": 25,
+    "nama": "Zaki Rahman",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2022,
+    "email": "zaki.rahman@example.com"
+  },
+  {
+    "id": 26,
+    "nama": "Amelia Saraswati",
+    "jurusan": "Hukum",
+    "angkatan": 2021,
+    "email": "amelia.saraswati@example.com"
+  },
+  {
+    "id": 27,
+    "nama": "Bima Aditya",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2023,
+    "email": "bima.aditya@example.com"
+  },
+  {
+    "id": 28,
+    "nama": "Chandra Wijaya",
+    "jurusan": "Kedokteran",
+    "angkatan": 2022,
+    "email": "chandra.wijaya@example.com"
+  },
+  {
+    "id": 29,
+    "nama": "Dina Pratiwi",
+    "jurusan": "Farmasi",
+    "angkatan": 2021,
+    "email": "dina.pratiwi@example.com"
+  },
+  {
+    "id": 30,
+    "nama": "Eko Nurcahyo",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2023,
+    "email": "eko.nurcahyo@example.com"
+  },
+  {
+    "id": 31,
+    "nama": "Fitriani Anggraini",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2022,
+    "email": "fitriani.anggraini@example.com"
+  },
+  {
+    "id": 32,
+    "nama": "Gita Lestari",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2021,
+    "email": "gita.lestari@example.com"
+  },
+  {
+    "id": 33,
+    "nama": "Hadi Prasetyo",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2023,
+    "email": "hadi.prasetyo@example.com"
+  },
+  {
+    "id": 34,
+    "nama": "Indra Gunawan",
+    "jurusan": "Akuntansi",
+    "angkatan": 2022,
+    "email": "indra.gunawan@example.com"
+  },
+  {
+    "id": 35,
+    "nama": "Jessica Tan",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2021,
+    "email": "jessica.tan@example.com"
+  },
+  {
+    "id": 36,
+    "nama": "Kevin Sanjaya",
+    "jurusan": "Hukum",
+    "angkatan": 2023,
+    "email": "kevin.sanjaya@example.com"
+  },
+  {
+    "id": 37,
+    "nama": "Larasati Dewi",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2022,
+    "email": "larasati.dewi@example.com"
+  },
+  {
+    "id": 38,
+    "nama": "Maria Caroline",
+    "jurusan": "Kedokteran",
+    "angkatan": 2021,
+    "email": "maria.caroline@example.com"
+  },
+  {
+    "id": 39,
+    "nama": "Nanda Kurniawan",
+    "jurusan": "Farmasi",
+    "angkatan": 2023,
+    "email": "nanda.kurniawan@example.com"
+  },
+  {
+    "id": 40,
+    "nama": "Putri Ayu",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2022,
+    "email": "putri.ayu@example.com"
+  },
+  {
+    "id": 41,
+    "nama": "Rizky Firmansyah",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2021,
+    "email": "rizky.firmansyah@example.com"
+  },
+  {
+    "id": 42,
+    "nama": "Siska Puspita",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2023,
+    "email": "siska.puspita@example.com"
+  },
+  {
+    "id": 43,
+    "nama": "Tommy Syahputra",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2022,
+    "email": "tommy.syahputra@example.com"
+  },
+  {
+    "id": 44,
+    "nama": "Umi Farida",
+    "jurusan": "Akuntansi",
+    "angkatan": 2021,
+    "email": "umi.farida@example.com"
+  },
+  {
+    "id": 45,
+    "nama": "Vicky Wibisono",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2023,
+    "email": "vicky.wibisono@example.com"
+  },
+  {
+    "id": 46,
+    "nama": "Yoga Pratama",
+    "jurusan": "Hukum",
+    "angkatan": 2022,
+    "email": "yoga.pratama@example.com"
+  },
+  {
+    "id": 47,
+    "nama": "Zahra Nuraini",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2021,
+    "email": "zahra.nuraini@example.com"
+  },
+  {
+    "id": 48,
+    "nama": "Agus Nugroho",
+    "jurusan": "Kedokteran",
+    "angkatan": 2023,
+    "email": "agus.nugroho@example.com"
+  },
+  {
+    "id": 49,
+    "nama": "Bambang Susanto",
+    "jurusan": "Farmasi",
+    "angkatan": 2022,
+    "email": "bambang.susanto@example.com"
+  },
+  {
+    "id": 50,
+    "nama": "Cahaya Sitorus",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2021,
+    "email": "cahaya.sitorus@example.com"
+  },
+  {
+    "id": 51,
+    "nama": "Dian Purnomo",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2023,
+    "email": "dian.purnomo@example.com"
+  },
+  {
+    "id": 52,
+    "nama": "Erlina Safitri",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2022,
+    "email": "erlina.safitri@example.com"
+  },
+  {
+    "id": 53,
+    "nama": "Farhan Adriansyah",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2021,
+    "email": "farhan.adriansyah@example.com"
+  },
+  {
+    "id": 54,
+    "nama": "Gina Wijaya",
+    "jurusan": "Akuntansi",
+    "angkatan": 2023,
+    "email": "gina.wijaya@example.com"
+  },
+  {
+    "id": 55,
+    "nama": "Hendra Irawan",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2022,
+    "email": "hendra.irawan@example.com"
+  },
+  {
+    "id": 56,
+    "nama": "Irma Suryani",
+    "jurusan": "Hukum",
+    "angkatan": 2021,
+    "email": "irma.suryani@example.com"
+  },
+  {
+    "id": 57,
+    "nama": "Jodi Prasetyo",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2023,
+    "email": "jodi.prasetyo@example.com"
+  },
+  {
+    "id": 58,
+    "nama": "Karina Putri",
+    "jurusan": "Kedokteran",
+    "angkatan": 2022,
+    "email": "karina.putri@example.com"
+  },
+  {
+    "id": 59,
+    "nama": "Lutfi Hakim",
+    "jurusan": "Farmasi",
+    "angkatan": 2021,
+    "email": "lutfi.hakim@example.com"
+  },
+  {
+    "id": 60,
+    "nama": "Mega Wulandari",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2023,
+    "email": "mega.wulandari@example.com"
+  },
+  {
+    "id": 61,
+    "nama": "Nadia Amalia",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2022,
+    "email": "nadia.amalia@example.com"
+  },
+  {
+    "id": 62,
+    "nama": "Oki Pradana",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2021,
+    "email": "oki.pradana@example.com"
+  },
+  {
+    "id": 63,
+    "nama": "Prabowo Wicaksono",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2023,
+    "email": "prabowo.wicaksono@example.com"
+  },
+  {
+    "id": 64,
+    "nama": "Qonita Zahra",
+    "jurusan": "Akuntansi",
+    "angkatan": 2022,
+    "email": "qonita.zahra@example.com"
+  },
+  {
+    "id": 65,
+    "nama": "Rafi Pratama",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2021,
+    "email": "rafi.pratama@example.com"
+  },
+  {
+    "id": 66,
+    "nama": "Siti Nurjanah",
+    "jurusan": "Hukum",
+    "angkatan": 2023,
+    "email": "siti.nurjanah@example.com"
+  },
+  {
+    "id": 67,
+    "nama": "Teguh Santoso",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2022,
+    "email": "teguh.santoso@example.com"
+  },
+  {
+    "id": 68,
+    "nama": "Ulfa Maulina",
+    "jurusan": "Kedokteran",
+    "angkatan": 2021,
+    "email": "ulfa.maulina@example.com"
+  },
+  {
+    "id": 69,
+    "nama": "Vania Putri",
+    "jurusan": "Farmasi",
+    "angkatan": 2023,
+    "email": "vania.putri@example.com"
+  },
+  {
+    "id": 70,
+    "nama": "Wawan Darmawan",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2022,
+    "email": "wawan.darmawan@example.com"
+  },
+  {
+    "id": 71,
+    "nama": "Yusuf Hidayat",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2021,
+    "email": "yusuf.hidayat@example.com"
+  },
+  {
+    "id": 72,
+    "nama": "Zia Agustin",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2023,
+    "email": "zia.agustin@example.com"
+  },
+  {
+    "id": 73,
+    "nama": "Ahmad Fauzi",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2022,
+    "email": "ahmad.fauzi@example.com"
+  },
+  {
+    "id": 74,
+    "nama": "Bella Febriani",
+    "jurusan": "Akuntansi",
+    "angkatan": 2021,
+    "email": "bella.febriani@example.com"
+  },
+  {
+    "id": 75,
+    "nama": "Catur Pradana",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2023,
+    "email": "catur.pradana@example.com"
+  },
+  {
+    "id": 76,
+    "nama": "Dika Saputra",
+    "jurusan": "Hukum",
+    "angkatan": 2022,
+    "email": "dika.saputra@example.com"
+  },
+  {
+    "id": 77,
+    "nama": "Eva Susanti",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2021,
+    "email": "eva.susanti@example.com"
+  },
+  {
+    "id": 78,
+    "nama": "Febrianto Putra",
+    "jurusan": "Kedokteran",
+    "angkatan": 2023,
+    "email": "febrianto.putra@example.com"
+  },
+  {
+    "id": 79,
+    "nama": "Gita Wulandari",
+    "jurusan": "Farmasi",
+    "angkatan": 2022,
+    "email": "gita.wulandari@example.com"
+  },
+  {
+    "id": 80,
+    "nama": "Heru Wicaksono",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2021,
+    "email": "heru.wicaksono@example.com"
+  },
+  {
+    "id": 81,
+    "nama": "Intan Permata",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2023,
+    "email": "intan.permata@example.com"
+  },
+  {
+    "id": 82,
+    "nama": "Joko Setiawan",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2022,
+    "email": "joko.setiawan@example.com"
+  },
+  {
+    "id": 83,
+    "nama": "Karina Anindita",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2021,
+    "email": "karina.anindita@example.com"
+  },
+  {
+    "id": 84,
+    "nama": "Lucky Satria",
+    "jurusan": "Akuntansi",
+    "angkatan": 2023,
+    "email": "lucky.satria@example.com"
+  },
+  {
+    "id": 85,
+    "nama": "Mia Rahma",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2022,
+    "email": "mia.rahma@example.com"
+  },
+  {
+    "id": 86,
+    "nama": "Nico Wijaya",
+    "jurusan": "Hukum",
+    "angkatan": 2021,
+    "email": "nico.wijaya@example.com"
+  },
+  {
+    "id": 87,
+    "nama": "Pandu Saputra",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2023,
+    "email": "pandu.saputra@example.com"
+  },
+  {
+    "id": 88,
+    "nama": "Qonita Ramadani",
+    "jurusan": "Kedokteran",
+    "angkatan": 2022,
+    "email": "qonita.ramadani@example.com"
+  },
+  {
+    "id": 89,
+    "nama": "Rani Puspitasari",
+    "jurusan": "Farmasi",
+    "angkatan": 2021,
+    "email": "rani.puspitasari@example.com"
+  },
+  {
+    "id": 90,
+    "nama": "Rio Pradana",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2023,
+    "email": "rio.pradana@example.com"
+  },
+  {
+    "id": 91,
+    "nama": "Salsabila Hani",
+    "jurusan": "Teknik Informatika",
+    "angkatan": 2022,
+    "email": "salsabila.hani@example.com"
+  },
+  {
+    "id": 92,
+    "nama": "Teguh Wibowo",
+    "jurusan": "Sistem Informasi",
+    "angkatan": 2021,
+    "email": "teguh.wibowo@example.com"
+  },
+  {
+    "id": 93,
+    "nama": "Ulfa Oktavia",
+    "jurusan": "Manajemen Bisnis",
+    "angkatan": 2023,
+    "email": "ulfa.oktavia@example.com"
+  },
+  {
+    "id": 94,
+    "nama": "Vina Anggraini",
+    "jurusan": "Akuntansi",
+    "angkatan": 2022,
+    "email": "vina.anggraini@example.com"
+  },
+  {
+    "id": 95,
+    "nama": "Wira Dinata",
+    "jurusan": "Ilmu Komunikasi",
+    "angkatan": 2021,
+    "email": "wira.dinata@example.com"
+  },
+  {
+    "id": 96,
+    "nama": "Yuni Kartika",
+    "jurusan": "Hukum",
+    "angkatan": 2023,
+    "email": "yuni.kartika@example.com"
+  },
+  {
+    "id": 97,
+    "nama": "Zainal Abidin",
+    "jurusan": "Teknik Mesin",
+    "angkatan": 2022,
+    "email": "zainal.abidin@example.com"
+  },
+  {
+    "id": 98,
+    "nama": "Adam Ramadhan",
+    "jurusan": "Kedokteran",
+    "angkatan": 2021,
+    "email": "adam.ramadhan@example.com"
+  },
+  {
+    "id": 99,
+    "nama": "Budi Kurniawan",
+    "jurusan": "Farmasi",
+    "angkatan": 2023,
+    "email": "budi.kurniawan@example.com"
+  },
+  {
+    "id": 100,
+    "nama": "Citra Anggraini",
+    "jurusan": "Teknik Sipil",
+    "angkatan": 2022,
+    "email": "citra.anggraini@example.com"
+  }
+]

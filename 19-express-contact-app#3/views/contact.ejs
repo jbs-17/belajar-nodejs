@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-3">Contact List</h2>
+
+      <% if (msg.length) { %>
+        <div class="alert alert-success" role="alert">
+          <strong>
+            <%= msg %>
+          </strong>
+        </div>
+
+        <% } %>
+
+          <a href="/contact/add" class="btn-dark btn mb-2">ADD CONTACT</a>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (contacts.length===0) { %>
+                  <tr>
+                    <td colspan="4">
+                      <div class="alert alert-danger fw-medium" role="alert">
+                        <strong>Contacts is Empty</strong>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <% } else { %>
+                    <% contacts.forEach((contact, no)=> { no++ %>
+                      <tr>
+                        <th scope="row">
+                          <%= no %>
+                        </th>
+                        <td>
+                          <%= contact.nama %>
+                        </td>
+                        <td>
+                          <%= contact.noHP %>
+                        </td>
+                        <td>
+                          <a href="/contact/<%= contact.nama %>" class="badge text-bg-primary text-decoration-none"><i
+                              class="bi bi-info-circle"></i> Detail</a>
+                        </td>
+                      </tr>
+                      <% }) %>
+
+                        <% } %>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </div>
+</div>
