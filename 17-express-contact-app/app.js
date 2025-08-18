@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const expressLayout = require('express-ejs-layouts');
-
+const { loadContacts, findContact } = require('./utils/contacts.js')
 
 
 app.set('view engine', 'ejs');
@@ -27,15 +27,30 @@ app.get('/', (req, res) => {
   ]
   res.render('index', { layout: 'layouts/main-layout.ejs', nama: 'Express Web Server', title: 'Home Page', mahasiswa });
 });
+
+
+
 app.get('/contact', (req, res) => {
-  res.render('contact', { layout: 'layouts/main-layout.ejs', title: 'Contect Page' });
+  const contacts = loadContacts();
+  res.render('contact', { layout: 'layouts/main-layout.ejs', title: 'Contect Page', contacts });
 });
+
+app.get('/contact/:nama', (req, res) => {
+  const contact = findContact(req.params.nama);
+  res.render('detail', { layout: 'layouts/main-layout.ejs', title: 'Contact Detail Page', contact });
+});
+
+
+
 app.get('/about', (req, res) => {
   res.render('about', { layout: 'layouts/main-layout.ejs', title: 'About Page' });
 });
-app.get('/search' , (req, res)=>{
+
+
+
+app.get('/search', (req, res) => {
   const { q } = req.query;
-  if(!q)return res.send('query tidak valid');
+  if (!q) return res.send('query tidak valid');
   res.send(`anda mencari ${q}`);
 })
 

@@ -13,15 +13,35 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>JatiBS</td>
-              <td>081229439547</td>
-              <td>
-                <a href="#" class="badge text-bg-primary text-decoration-none"><i class="bi bi-info-circle"></i>  Detail</a>
-              </td>
-            </tr>
+            <% if (contacts.length===0) { %>
+              <tr>
+                <td colspan="4">
+              <div class="alert alert-danger fw-medium" role="alert">
+                <strong>Contacts is Empty</strong>
+              </div>
+                </td>
+              </tr>
 
+              <% } else { %>
+                <% contacts.forEach((contact, no)=> { no++ %>
+                  <tr>
+                    <th scope="row">
+                      <%= no %>
+                    </th>
+                    <td>
+                      <%= contact.nama %>
+                    </td>
+                    <td>
+                      <%= contact.noHP %>
+                    </td>
+                    <td>
+                      <a href="/contact/<%= contact.nama %>" class="badge text-bg-primary text-decoration-none"><i
+                          class="bi bi-info-circle"></i> Detail</a>
+                    </td>
+                  </tr>
+                  <% }) %>
+
+                    <% } %>
           </tbody>
         </table>
       </div>
