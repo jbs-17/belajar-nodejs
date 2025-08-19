@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://akuntamulaptophp:1248@cluster0.5bgwgkd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/', { dbName: 'contact_app' }).catch((error)=>{
-  console.log(error);
-  process.exit(1);
-});
+// mongoose.connect('mongodb+srv://akuntamulaptophp:1248@cluster0.5bgwgkd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/', { dbName: 'contact_app' }).catch((error)=>{
+//   console.log(error);
+//   process.exit(1);
+// });
 
 
 //Insert 1 dokumen

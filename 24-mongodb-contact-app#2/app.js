@@ -102,10 +102,10 @@ app.post('/contact/add',
   async (req, res, newContact) => {
     newContact = req.body;
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    try {
+      if (!errors.isEmpty()) {
       throw errors.array();
     }
-    try {
       const contact = new Contact(req.body);
       await contact.save();
 
@@ -201,6 +201,29 @@ app.use((req, res, next) => {
 
 
 
-app.listen(port, () => {
-  console.log(`Contact App listening at port ${port}`);
-});
+
+
+
+
+
+
+async function db() {
+  mongoose.set('debug', true)
+  try {
+    console.log('memulai...');
+    await mongoose.connect('mongodb://akuntamulaptophp:1248@ac-zfjbd1q-shard-00-00.5bgwgkd.mongodb.net:27017,ac-zfjbd1q-shard-00-01.5bgwgkd.mongodb.net:27017,ac-zfjbd1q-shard-00-02.5bgwgkd.mongodb.net:27017/?ssl=true&replicaSet=atlas-11rwqo-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0', {
+      dbName: 'contact_app',
+      serverSelectionTimeoutMS: 3000, // Increase timeout to 30 seconds
+      bufferTimeoutMS: 3000,
+    });
+    console.log('Berhasil terkoneksi dengan database!');
+
+    app.listen(port, () => {
+      console.log(`Contact App listening at port ${port}`);
+    });
+  } catch (err) {
+    console.error('Error connecting to database:', err);
+  }
+}
+
+db();
