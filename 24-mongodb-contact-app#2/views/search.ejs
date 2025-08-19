@@ -1,0 +1,63 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Cari Kontak</h2>
+
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <form class="d-flex" action="/search">
+        <input value="<%= q %>" class="form-control me-2" type="search" name="q" placeholder="Cari nama kontak..."
+          aria-label="Search">
+        <button class="btn btn-primary" type="submit">Cari</button>
+      </form>
+    </div>
+  </div>
+
+<% if (!search.length) { %>
+ <div
+  class="alert alert-primary"
+  role="alert"
+ >
+  Search <strong><%= q %></strong> no one macthing result!
+ </div>
+ 
+<% } %>
+
+  <% if (search.length) { %>
+    <% search.forEach(contact=> { %>
+      <div class="row g-4">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="card shadow-sm contact-card h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">
+                <%= contact.nama %>
+              </h5>
+              <p class="card-text text-muted">
+                <%= contact.noHP %>
+              </p>
+              <p class="card-text text-muted">
+                <%= contact.email %>
+              </p>
+              <p class="card-text text-muted"></p>
+              <hr>
+              <a href="/contact/<%= contact.nama %>" class="btn btn-sm btn-outline-info">Detail</a>
+
+              <form class="d-inline" action="/contact?_method=DELETE" method="post">
+                <input type="hidden" name="nama" value="<%= contact.nama %>">
+                <button class="btn btn-sm ms-2 btn-outline-danger" type="submit"
+                  onclick="return confirm('are you sure to delete contact?')">Delete</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <% }) %>
+          <% }%>
+
+
+
+
+
+
+
+      </div>
+
+</div>

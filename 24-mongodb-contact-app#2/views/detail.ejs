@@ -1,0 +1,41 @@
+  <div class="row g-4">
+    <div class="col-md-8 start-0">
+      <h2 class="m-3 text-dark text-start">Contact Detail</h2>
+
+      <% if (!contact) { %>
+        <div class="alert alert-danger fw-medium" role="alert">
+          <strong>Contact Not Found!</strong>
+          <br>
+          <a href="/contact" class="alert-link fw-bold">&laquo; Back to contact list!</a>
+        </div>
+        <% }else{ %>
+          <div class="card p-1 start-0">
+            <div class="card-body">
+              <h4 class="card-title">
+                <%= contact.nama %>
+              </h4>
+              <h6 class="card-subtitle text-muted">
+                <%= contact.noHP %>
+              </h6>
+              <p class="card-text">
+                <%= contact.email %>
+              </p>
+              <a href="/contact/edit/<%= contact.nama %>" class="btn btn-info badge mb-2">edit</a>
+              <!-- <a href="/contact/delete/<%= contact.nama %>" class="btn btn-danger badge mb-2" onclick="return confirm('are you sure to delete contact?')">delete</a> -->
+
+              <form class="d-inline" action="/contact?_method=DELETE" method="post">
+                <input type="hidden" name="nama" value="<%= contact.nama %>">
+                <button class="btn btn-danger badge mb-2" type="submit"
+                  onclick="return confirm('are you sure to delete contact?')">delete</button>
+              </form>
+
+              <br>
+              <a href="/contact" class="card-link link-primary m-1 mt-1">&laquo; Back to contact list</a>
+            </div>
+          </div>
+          <% } %>
+
+
+
+    </div>
+  </div>

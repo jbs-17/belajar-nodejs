@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 m-3 p-3 ">
+      <h2 class="fw-bold">EDIT CONTACT</h2>
+      <% if (errors !==undefined) { %>
+
+        <div class="alert alert-danger" role="alert">
+          <strong>ERROR</strong>
+          <ul>
+
+            <% errors.forEach(error=> { %>
+              <li>
+                <%= error.msg %>
+              </li>
+              <% }) %>
+          </ul>
+        </div>
+
+        <% } %>
+
+          <form action="/contact/update" method="post" class="form-floating form-check form-control-plaintext">
+
+            <div class="mb-3">
+              <label for="nama" class="form-label">Name</label>
+              <input type="hidden" name="oldNama" value="<%=  contact.oldNama || contact.nama %>" id="">
+              <input type="text" class="form-control form-control-sm" name="nama" id="nama"
+                aria-describedby="helpId-nama" placeholder="Name" required value="<%= contact.nama %>" />
+              <small id="helpId-nama" class="form-text text-muted"></small>
+            </div>
+
+            <div class="mb-3">
+              <label for="noHP" class="form-label">Phone Number</label>
+              <input required type="text" class="form-control form-control-sm" name="noHP" id="noHP"
+                aria-describedby="helpId" placeholder="Phone Number" value="<%= contact.noHP %>" />
+              <small id="helpId" class="form-text text-muted"></small>
+            </div>
+
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input required type="email" class="form-control form-control-sm" name="email" id="email"
+                aria-describedby="helpId" placeholder="Email" value="<%= contact.email %>" />
+              <small id="helpId" class="form-text text-muted"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              SAVE CHANGES
+            </button>
+
+
+          </form>
+
+    </div>
+  </div>
+</div>
