@@ -1,15 +1,15 @@
 <div class="container-md">
-<div class="row justify-content-center">
-    <div class="col-4 w-100 mt-5 text-center">
-      <h1 class="ft-bold">
+    <div class="d-flex flex-column justify-content-center align-items-center text-center gap-3" style="min-height:80vh ;">
+      <h1 class="ft-bold fs-1">
         PAGE NOT FOUND
       </h1>
       <p class="m-0">
-        requested path:
+        requested page:
         <%= path %> <br class="">
-        not found on this server <br class="">
-         
+        not found! <br class="">
+        <a href="<%= referer %>">
+          <button type="button" class="btn btn-sm btn-primary m-3">BACK TO <%= referer==='/home' ? 'HOME PAGE' : referer %></button>
+        </a>
       </p>
-    </div>
   </div>
 </div>

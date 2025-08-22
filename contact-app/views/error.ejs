@@ -1,12 +1,23 @@
-<div class="container-md">
-<div class="row justify-content-center">
-    <div class="col-4 w-100 mt-5">
-      <h1 class="text-center ft-bold">
-        INTERNAL SERVER ERROR
-      </h1>
-      <p class="text-center">
-        <%= error %>
-      </p>
-    </div>
+<div class="container-md p-3">
+  <div class="d-flex flex-column justify-content-center align-items-center text-center gap-3 mt-3" style="min-height:80vh ;">
+    <h1 class="ft-bold fs-1">
+      INTERNAL SERVER ERROR
+    </h1>
+    <h6 class="m-0">
+      <%= error %>
+    </h6>
+
+    <ul class="list-group list-group-flush">
+
+      <% if (stack) { %>
+        <p>
+          <% stack.forEach(s=> { %>
+            <li class="list-group-item list-group-item-danger">
+              <%= s %>
+            </li>
+            <% }) %>
+        </p>
+        <% } %>
+    </ul>
   </div>
 </div>

@@ -1,31 +1,39 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-//User Schema
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: [true, 'email address already in use! use another email address'], 
-    trim: true,
+const ContactSchema = new Schema(
+  {
+    nama: {
+      type: String,
+      required: [true, 'Nama kontak wajib diisi'],
+      trim: true
+    }
   },
-  phone: {
-    type: String,
-    required: false, 
-    trim: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    trim: true
-  },
-  data: {
-    type: [{ type: Schema.Types.Mixed }],
-    default: []
+  {
+    strict: false, // memungkinkan field dinamis lain
+    timestamps: false
   }
-}, {
-  timestamps: true // Menambahkan createdAt dan updatedAt
-});
+);
 
-// Membuat model
-const User = mongoose.model('User', userSchema);
+const UserSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: [true, 'Email required'],
+      unique: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: [true, 'Password required'],
+      trim: true
+    },
+    contacts: {
+      type: [ContactSchema],
+      default: []
+    }
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model('User', UserSchema);
 export default User;
