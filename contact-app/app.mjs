@@ -119,10 +119,10 @@ app.post("/sign-up", validateSignUp, async (req, res) => {
     return res.send(result.array())
   }
   const { password } = req.body;
-  req.body.password = bcrypt.hash()
+  req.body.password = await bcrypt.hash(password, 10);
   const user = new User(req.body);
-  const save = await user.save();
-  return res.send(save);
+  // const save = await user.save();
+  return res.send(user);
 });
 
 
