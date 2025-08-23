@@ -8,6 +8,12 @@
       </h2>
       <p>Login to your account</p>
 
+<% if (signedIn.length) { %>
+ <div class="alert alert-info fs-6">
+  <%= signedIn %>
+ </div>
+<% } %>
+
       <% if (signUp.length) { %>
               <div class="alert alert-success fs-6" role="alert">
                 <%= signUp %>
