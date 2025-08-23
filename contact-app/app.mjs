@@ -9,10 +9,14 @@ import { body, validationResult, check, } from 'express-validator';
 import rateLimit from 'express-rate-limit';
 import User from './models/user.mjs';
 import bcrypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken';
 
 const layout = {
   ...config,
-  layout: "./layouts/layout.ejs"
+  layout: "./layouts/layout.ejs",
+  msg: {},
+  script: null,
+  error: []
 };
 const app = express();
 const signedIn = express.Router();
@@ -67,17 +71,16 @@ page.get("/", (req, res) => {
 
 //halaman sign-up atau daftar akun
 page.get("/sign-up", (req, res) => {
-  res.render("sign-up", {
-    ...layout,
-    title: "Contacts"
-  });
+  return res.render('sign-up', { ...layout, title: '', msg: {}, error: null, email: null });
 });
 
 //halaman sign-in atau login
 page.get("/sign-in", (req, res) => {
   res.render("sign-in", {
     ...layout,
-    title: "Contacts"
+    title: "Sign In",
+    signUp: req.flash('sign-up'),
+    email: req.flash('email')
   });
 });
 
@@ -92,12 +95,52 @@ const validateSignIn = [
   }).notEmpty(),
   body('email', 'email invalid').isEmail().notEmpty()
 ]
-app.post("/sign-in", validateSignIn, (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+app.post("/sign-in", validateSignIn, async (req, res) => {
+  const result = validationResult(req);
+  const { email, password, remember } = req.body;
+  if (!result.isEmpty()) {
+    return res.render('sign-in', { signUp: '', title: 'Sign In', ...layout, msg: { false: 'Sign In failed!' }, error: result.array(), email });
+  };
+  try {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT secret is not defined');
+    }
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      throw new Error('Invalid password');
+    }
+
+    const age = 43001;
+    const cookieOptions = {
+      maxAge: (1000) * age
+    };
+    const tokenOptions = {
+      expiresIn: age
+    };
+
+    if (!remember) {
+      delete cookieOptions.maxAge;
+      tokenOptions.expiresIn = "12 hours";
+    };
+    const token = jsonwebtoken.sign({
+      id: user._id,
+    }, process.env.JWT_SECRET, tokenOptions);
+
+    console.log(cookieOptions);
+    res.cookie('sign_in_token', token, cookieOptions);
+    req.flash('sign-in', 'Sign In succesfuly, Welcome!');
+    return res.redirect('/dashboard');
+  } catch (error) {
+    console.log(error);
+    return res.render('sign-in', { signUp: '', title: 'Sign In', ...layout, msg: { false: 'Sign In failed!' }, error: [{ path: 'email', msg: error.message }, { path: 'password', msg: '' }], email });
   }
-  res.json(req.body);
 });
 
 
@@ -106,8 +149,12 @@ const validateSignUp = [
   body('email').isEmail().withMessage('email invalid'),
   body('password').notEmpty().withMessage('password is required'),
   body('password-confirmation').custom((value, { req }) => {
-    if (value !== req.body.password) {
+    const { password } = req.body;
+    if (value !== password) {
       throw new Error('password confirmation does not match');
+    }
+    if (password.length < 8 || value.length < 8) {
+      throw new Error('password length minimun is 8');
     }
     return true;
   })
@@ -116,13 +163,24 @@ const validateSignUp = [
 app.post("/sign-up", validateSignUp, async (req, res) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    return res.send(result.array())
+    console.log(result.array());
+    return res.render('sign-up', { ...layout, title: '', msg: { false: 'Sign Up falied' }, error: result.array(), ...req.body });
   }
-  const { password } = req.body;
+  const { password, email } = req.body;
   req.body.password = await bcrypt.hash(password, 10);
   const user = new User(req.body);
-  // const save = await user.save();
-  return res.send(user);
+  try {
+    const save = await user.save();
+  } catch (error) {
+    if (error.message?.includes('duplicate')) {
+      error = [{ msg: 'email has been registered', path: 'email' }]
+    }
+    return res.render('sign-up', { ...layout, title: '', msg: { false: 'Sign Up falied \n' }, error, email });
+  }
+
+  req.flash('email', email);
+  req.flash('sign-up', 'Sign Up success! Sign In to your account here!');
+  return res.redirect('/sign-in');
 });
 
 
@@ -159,8 +217,8 @@ signedIn.get("/contacts", async (req, res) => {
     contacts
   });
 });
-signedIn.get("/profile", async (req, res) => {
-  res.render("profile", {
+signedIn.get("/dashboard", async (req, res) => {
+  res.render("dashboard", {
     ...layout,
     title: "Contacts"
   });
