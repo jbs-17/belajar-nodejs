@@ -1,6 +1,6 @@
 import express from "express";
 import User from '../models/user.mjs';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
 import { body, validationResult, check, } from 'express-validator';
 import config from "../config.mjs";
@@ -20,7 +20,7 @@ page.get("/", (req, res) => {
 
 //halaman sign-up atau daftar akun
 page.get("/sign-up", (req, res) => {
-  return res.render('sign-up', { ...layout, title: 'Sign In', msg: {}, error: null, email: null });
+  return res.render('sign-up', { ...layout, title: 'Sign Up', msg: {}, error: null, email: null });
 });
 
 //halaman sign-in atau login
@@ -103,7 +103,6 @@ page.post("/sign-in", validateSignIn, async (req, res) => {
     req.flash('sign-in', 'Sign In succesfuly, Welcome!');
     return res.redirect('/dashboard');
   } catch (error) {
-    console.log(error);
     return res.render('sign-in', { signedIn: '', signUp: '', title: 'Sign In', ...layout, msg: { false: 'Sign In failed!' }, error: [{ path: 'email', msg: error.message }, { path: 'password', msg: '' }], email });
   }
 });

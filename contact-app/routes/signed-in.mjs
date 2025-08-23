@@ -8,11 +8,8 @@ const { layout } = config;
 const signedIn = express.Router();
 
 
-signedIn.use(async (req, res, next) => {
+const verifySignIn = async (req, res, next) => {
   const { sign_in_token } = req.cookies;
-  if(!sign_in_token){
-    return next();
-  }
   try {
     const verify = jsonwebtoken.verify(sign_in_token, process.env.JWT_SECRET);
     const { id } = verify;
@@ -22,13 +19,13 @@ signedIn.use(async (req, res, next) => {
     }
     next();
   } catch {
-    req.flash('signedIn', 'Sign In to your account first!');
+    req.flash('signedIn', 'Sign In to your account!');
     res.redirect('/sign-in')
   }
-})
+};
 
 /* signedIn Router */
-signedIn.get("/sign-out", async (req, res) => {
+signedIn.get("/sign-out",verifySignIn, async (req, res) => {
   res.cookie('sign_in_token', '', { expires: 0 });
   res.render("sign-out", {
     ...layout,
@@ -38,14 +35,14 @@ signedIn.get("/sign-out", async (req, res) => {
 
 
 
-signedIn.get("/dashboard", async (req, res) => {
+signedIn.get("/dashboard",verifySignIn, async (req, res) => {
   res.render("dashboard", {
     ...layout,
     title: "Contacts",
     signedIn: req.flash('sign-in')
   });
 });
-signedIn.get('/contact/create', (req, res) => {
+signedIn.get('/contact/create',verifySignIn, (req, res) => {
 
 });
 //
@@ -62,5 +59,5 @@ signedIn.get('/contact/:uuid', async (req, res) => {
 });
 
 
-export {signedIn}
+export {signedIn, verifySignIn}
 export default signedIn;

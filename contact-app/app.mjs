@@ -7,7 +7,8 @@ import flash from "connect-flash";
 import cookieParser from "cookie-parser";
 import rateLimit from 'express-rate-limit';
 import page from "./routes/page.mjs";
-import signedIn from "./routes/signed-in.mjs";
+import {signedIn,verifySignIn } from "./routes/signed-in.mjs";
+import path from 'node:path';
 
 const {layout} = config;
 
@@ -62,7 +63,7 @@ app.use('/', signedIn);
 app.use((req, res) => {
   res.status(404).render("404", {
     ...layout,
-    title: "404",
+    title: path.basename(req.path),
     path: req.path,
     referer: req.headers.referer || '/home'
   });
