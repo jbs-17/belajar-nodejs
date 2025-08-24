@@ -2,6 +2,8 @@ import config from "../config.mjs";
 import express from "express";
 import User from "../models/user.mjs";
 import jsonwebtoken from 'jsonwebtoken';
+import ejs from 'ejs';
+
 
 const { layout } = config;
 
@@ -46,10 +48,12 @@ signedIn.get("/dashboard", verifySignIn, async (req, res) => {
 });
 signedIn.get('/settings', verifySignIn, async (req, res) => {
   let { theme } = req.query;
-  let info = '';
+  let info = req.flash('info') || '';
   if (theme) {
     await req.user.toggleTheme();
-    info = `Change to ${theme === 'default' ? 'Dark' : 'Default'} Theme`;
+    info = `Changed to ${theme === 'default' ? 'Default' : 'Dark'} Theme`;
+    req.flash('info', info);
+    return res.redirect('/settings');
   }
   res.render("settings", {
     ...layout,
@@ -58,33 +62,162 @@ signedIn.get('/settings', verifySignIn, async (req, res) => {
     ...req.userData
   });
 });
+
 //
-signedIn.get('/contact/add', async (req, res) => {
+signedIn.get('/contact/add', verifySignIn, async (req, res) => {
+  const info = req.flash('info')[0] || '';
+  const error = info.includes(':') ? info : '';
   res.render("add", {
     ...layout,
     title: "Contacts",
     signedIn: req.flash('sign-in'),
-    ...req.user
+    ...req.userData,
+    info,
+    error
   });
 });
-signedIn.post('/contact/add', async (req, res) => {
-  return res.json(req.body)
-  res.render("add", {
-    ...layout,
-    title: "Contacts",
-    signedIn: req.flash('sign-in'),
-    ...req.user
-  });
+signedIn.post('/contact/add', verifySignIn, async (req, res) => {
+  const contact = createContact(req.body);
+  try {
+    await req.user.addContact(contact);
+    req.flash('info', `Contact named ${req.body.name} added!`);
+    res.redirect('/contact/add');
+  } catch (error) {
+    if (error.message && error.message?.includes('name')) {
+      req.flash('info', 'error: ' + error.message);
+    } else {
+      req.flash('info', 'Error to add contact! pleasesa input valid form!');
+    }
+    res.redirect('/contact/add');
+  }
 });
-//UPDATE edit kontak
-signedIn.patch('/contact/edit/:uuid', async (req, res) => {
 
-});
+
+
+
 //READ lihat detail kontak
-signedIn.get('/contact/:uuid', async (req, res) => {
+signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
+  const { nameId } = req.params;
+  namex = nameId;
+  try {
+    let { _id, favorite, priority, createdAt, updatedAt, name, ...fields } = await req.user.findContactByName(nameId);
+    fields = Object.entries(fields);
+    const data = {
+      _id, favorite, priority, createdAt: new Date(createdAt).toUTCString(), updatedAt: new Date(updatedAt).toUTCString(), name, fields
+    };
 
+    res.render("detail", {
+      ...layout,
+      title: name + "Detail",
+      ...data
+    });
+
+  } catch (error) {
+    res.render("detail-404", {
+      ...layout,
+      title: namex + "Detail",
+      namex
+    });
+  }
 });
+
+
+//UPDATE edit kontak
+signedIn.get('/contact/edit/:nameId', verifySignIn,async (req, res, namex) => {
+  const { nameId } = req.params;
+  namex = nameId;
+  try {
+    let { _id, favorite, priority, createdAt, updatedAt, name, ...fields } = await req.user.findContactByName(nameId);
+    fields = Object.entries(fields);
+    const data = {
+      _id, favorite, priority, createdAt: new Date(createdAt).toUTCString(), updatedAt: new Date(updatedAt).toUTCString(), name, fields
+    };
+
+    res.render("detail", {
+      ...layout,
+      title: name + "Detail",
+      ...data
+    });
+
+  } catch (error) {
+    res.render("detail-404", {
+      ...layout,
+      title: namex + "Detail",
+      namex
+    });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 export { signedIn, verifySignIn }
 export default signedIn;
+
+
+const formData = {
+  "name": "papua",
+  "priority": "23",
+  "favorite": "yes",
+  "field-0": "halo",
+  "value-0": "hai",
+  // "field-1": "israel",
+  "value-1": "babi",
+  "field-2": "field",
+  // "value-2": "value"
+}
+function createContact({ name, priority = 0, favorite = "", ...fields }) {
+  favorite = Boolean(favorite.length);
+  const contact = {
+    name, priority, favorite,
+  };
+  fields = Object.entries(fields);
+  const fieldNames = [];
+  const fieldValues = [];
+  fields.forEach(([key, value]) => {
+    if (!key.length || !value.length) {
+      return
+    };
+    if (!includeNumber(key)) {
+      return
+    }
+    const num = key.split('-')[1];
+    if (key.includes('field-')) {
+      return fieldNames.push([num, value]);
+    }
+    return fieldValues.push([num, value]);
+  });
+
+  for (const [num, fieldName] of fieldNames) {
+    for (const [valueNum, fieldValue] of fieldValues) {
+      if (valueNum.includes(num)) {
+        contact[fieldName] = fieldValue;
+      }
+    }
+  }
+  return contact;
+};
+
+
+signedIn.get('/papua', (req, res) => {
+})
+
+function includeNumber(str = '') {
+  for (const number of [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]) {
+    if (str.includes(number)) {
+      return true
+    }
+  }
+  return false
+}
+// console.log(createContact(formData));
+

@@ -57,6 +57,24 @@ UserSchema.methods.toggleTheme = async function () {
   return this.save();
 };
 
+UserSchema.methods.addContact = async function (newContact) {
+  this.contacts.forEach(contact => {
+    if (contact.name === newContact.name) {
+      throw new Error(`contact name alredy used by other contact! use new another name for the contact!`);
+    }
+  });
+  this.contacts.push(newContact);
+  return await this.save();
+};
+UserSchema.methods.findContactByName = async function (name) {
+  for (const contact of this.contacts) {
+    if(contact.name === name) {
+      return contact.toJSON()
+    }
+  }
+  return null
+};
+
 
 UserSchema.methods.sortContactsBy = function (criteria = 'newest') {
   const contacts = [...this.contacts];
