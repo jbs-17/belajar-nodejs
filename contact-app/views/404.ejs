@@ -1,20 +1,35 @@
-<div class="container-md">
-  <div class="d-flex flex-column justify-content-center align-items-center text-center gap-3" style="min-height:80vh ;">
-    <h1 class="ft-bold fs-1">
-      PAGE NOT FOUND
+<div class="container-lg p-3 mt-3">
+  <div class="mb-4 p-3">
+    <h1 class="h3 h-md-1 fw-bold text-primary">
+      <% path %> Page Not Found
     </h1>
-    <p class="m-0">
-      requested page:
-      <%= path %> <br class="">
-        not found! <br class="">
-
-
-        <a href="<%= referer %>">
-          <button type="button" class="btn btn-smbtn btn-outline-primary m-3">BACK TO <%= referer==='/home'
-              ? 'HOME PAGE' : referer %>
-          </button>
-        </a>
-
+    <p class="lead text-muted m-1">
+      Requested Page <strong class="fw-bold">
+        <%= path %>
+      </strong> not found
     </p>
+    <hr>
+
+    <div class="card text-center">
+      <div class="card-body p-4 text-center">
+        <h2 class="h4 text-danger fw-bold"><span class="fs-1">
+          404</span> <br /> <span class="fs-5">Page Not Found
+        </span></h2>
+      <p class="text-muted">
+        Page you are looking for does not exist.
+      </p>
+      <a href="<%= referer %>" class="btn btn-primary btn-sm mt-3">Back to <strong>
+        <%= referer === '/home'
+        ? 'HOME PAGE': referer %>
+      </strong>
+      </a>
+
+
+
+
+    </div>
   </div>
+
+
+</div>
 </div>

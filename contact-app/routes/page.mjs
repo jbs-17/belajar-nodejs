@@ -17,6 +17,10 @@ page.get("/", (req, res) => {
   res.render("index", { ...layout, title: "Home" });
 });
 
+page.get('/about', (req, res)=>{
+  res.render("about", { ...layout, title: "About" });
+})
+
 //halaman sign-up atau daftar akun
 page.get("/sign-up", (req, res) => {
   return res.render('sign-up', { ...layout, title: 'Sign Up', msg: {}, error: null, email: null });
