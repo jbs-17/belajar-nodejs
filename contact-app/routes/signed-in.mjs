@@ -13,10 +13,12 @@ const verifySignIn = async (req, res, next) => {
   try {
     const verify = jsonwebtoken.verify(sign_in_token, process.env.JWT_SECRET);
     const { id } = verify;
-    const user = User.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       throw new Error('User not found!');
     }
+    req.user = user
+    req.userData = user.toJSON();
     next();
   } catch {
     req.flash('signedIn', 'Sign In to your account!');
@@ -25,7 +27,7 @@ const verifySignIn = async (req, res, next) => {
 };
 
 /* signedIn Router */
-signedIn.get("/sign-out",verifySignIn, async (req, res) => {
+signedIn.get("/sign-out", verifySignIn, async (req, res) => {
   res.cookie('sign_in_token', '', { expires: 0 });
   res.render("sign-out", {
     ...layout,
@@ -35,19 +37,44 @@ signedIn.get("/sign-out",verifySignIn, async (req, res) => {
 
 
 
-signedIn.get("/dashboard",verifySignIn, async (req, res) => {
+signedIn.get("/dashboard", verifySignIn, async (req, res) => {
   res.render("dashboard", {
     ...layout,
-    title: "Contacts",
+    title: "Dashboard",
     signedIn: req.flash('sign-in')
   });
 });
-signedIn.get('/contact/create',verifySignIn, (req, res) => {
-
+signedIn.get('/settings', verifySignIn, async (req, res) => {
+  let { theme } = req.query;
+  let info = '';
+  if (theme) {
+    await req.user.toggleTheme();
+    info = `Change to ${theme === 'default' ? 'Dark' : 'Default'} Theme`;
+  }
+  res.render("settings", {
+    ...layout,
+    title: "Setting",
+    info,
+    ...req.userData
+  });
 });
 //
-signedIn.get('/contact/edit/:uuid', async (req, res) => {
-
+signedIn.get('/contact/add', async (req, res) => {
+  res.render("add", {
+    ...layout,
+    title: "Contacts",
+    signedIn: req.flash('sign-in'),
+    ...req.user
+  });
+});
+signedIn.post('/contact/add', async (req, res) => {
+  return res.json(req.body)
+  res.render("add", {
+    ...layout,
+    title: "Contacts",
+    signedIn: req.flash('sign-in'),
+    ...req.user
+  });
 });
 //UPDATE edit kontak
 signedIn.patch('/contact/edit/:uuid', async (req, res) => {
@@ -59,5 +86,5 @@ signedIn.get('/contact/:uuid', async (req, res) => {
 });
 
 
-export {signedIn, verifySignIn}
+export { signedIn, verifySignIn }
 export default signedIn;

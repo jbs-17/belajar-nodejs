@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
 import { body, validationResult, check, } from 'express-validator';
 import config from "../config.mjs";
-import signedIn from "./signed-in.mjs";
 
 const page = express.Router();
 
@@ -33,12 +32,12 @@ page.get("/sign-in", (req, res) => {
     signedIn: req.flash('signedIn')
   });
 });
-page.get('/sign-in/verfify', (req, res) => {
+page.get('/sign-in/verfify', async (req, res) => {
   try {
     const { sign_in_token } = req.cookies;
     const verify = jsonwebtoken.verify(sign_in_token, process.env.JWT_SECRET);
     const { id } = verify;
-    const user = User.findById(id);
+    const user = (await User.findById(id));
     if (!user) {
       throw new Error('User not found!');
     }
@@ -136,6 +135,7 @@ page.post("/sign-up", validateSignUp, async (req, res) => {
   try {
     const save = await user.save();
   } catch (error) {
+    console.log(error);
     if (error.message?.includes('duplicate')) {
       error = [{ msg: 'email has been registered', path: 'email' }]
     }
