@@ -5,6 +5,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import ejs from 'ejs';
 
 
+
 const { layout } = config;
 
 const signedIn = express.Router();
@@ -79,9 +80,10 @@ signedIn.get('/contact/add', verifySignIn, async (req, res) => {
 signedIn.post('/contact/add', verifySignIn, async (req, res) => {
   const contact = createContact(req.body);
   try {
+    const { name } = req.body;
     await req.user.addContact(contact);
-    req.flash('info', `Contact named ${req.body.name} added!`);
-    res.redirect('/contact/add');
+    req.flash('info', `Contact named ${name} added!`);
+    res.redirect(`/contact/${name}`);
   } catch (error) {
     if (error.message && error.message?.includes('name')) {
       req.flash('info', 'error: ' + error.message);
@@ -93,10 +95,9 @@ signedIn.post('/contact/add', verifySignIn, async (req, res) => {
 });
 
 
-
-
-//READ lihat detail kontak
-signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
+signedIn.get('/contact/:nameId/download', verifySignIn, async (req, res, namex) => {
+  const info = req.flash('info')[0] || '';
+  const { format } = req.query;
   const { nameId } = req.params;
   namex = nameId;
   try {
@@ -106,13 +107,63 @@ signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
       _id, favorite, priority, createdAt: new Date(createdAt).toUTCString(), updatedAt: new Date(updatedAt).toUTCString(), name, fields
     };
 
-    res.render("detail", {
+    const puppeteer = import('puppeteer-core');
+    const browser = await (await puppeteer).launch({
+      'executablePath': "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    });
+    const page = await browser.newPage();
+    return ejs.renderFile('./views/template/detail.ejs', {
       ...layout,
       title: name + "Detail",
       ...data
+    }, async (error, html) => {
+      if (error) { console.log(error);; return res.json(data); }
+      const filePath = `./public/${_id}.pdf`
+      await page.setContent(html);
+      await page.pdf({ 'path': filePath });
+      await browser.close();
+      res.attachment(`${name}.pdf`);  
+      return res.download(filePath, (error) => {
+      })
+    });
+    res.json(data)
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+});
+
+
+
+
+
+//READ lihat detail kontak
+signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
+  const info = req.flash('info')[0] || '';
+  const { favorite: f } = req.query;
+  const { nameId } = req.params;
+  namex = nameId;
+  try {
+    console.log({ f });
+    if (f) {
+      return req.user.toggleFavorite(nameId);
+    }
+    let { _id, favorite, priority, createdAt, updatedAt, name, ...fields } = await req.user.findContactByName(nameId);
+    fields = Object.entries(fields);
+    const data = {
+      _id, favorite, priority, createdAt: new Date(createdAt).toUTCString(), updatedAt: new Date(updatedAt).toUTCString(), name, fields
+    };
+
+    res.render("detail", {
+      ...layout,
+      title: name + "Detail",
+      ...data,
+      info
     });
 
   } catch (error) {
+    console.log(error);
     res.render("detail-404", {
       ...layout,
       title: namex + "Detail",
@@ -123,7 +174,7 @@ signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
 
 
 //UPDATE edit kontak
-signedIn.get('/contact/edit/:nameId', verifySignIn,async (req, res, namex) => {
+signedIn.get('/contact/edit/:nameId', verifySignIn, async (req, res, namex) => {
   const { nameId } = req.params;
   namex = nameId;
   try {

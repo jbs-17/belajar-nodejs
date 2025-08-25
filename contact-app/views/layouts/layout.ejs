@@ -23,10 +23,13 @@
 
 
         <script type="module">
+
           const is_sign_in_token = document.cookie.includes('sign_in_token');
+          console.log({is_sign_in_token});
           if (is_sign_in_token) {
             try {
-              const response = await fetch(location.href.replace(location.pathname, '/sign-in/verfify'), {
+              // const response = await fetch(location.href.replace(location.pathname, '/sign-in/verfify'), {
+              const response = await fetch(location.origin + '/sign-in/verfify', {
                 headers: {
                   'Accept': 'application/json'
                 }
@@ -43,6 +46,7 @@
           } else {
             notSignIn();
           }
+
           function notSignIn() {
             const dashboardPages = [
               'dashboard'

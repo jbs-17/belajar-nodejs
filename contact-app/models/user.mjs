@@ -68,8 +68,17 @@ UserSchema.methods.addContact = async function (newContact) {
 };
 UserSchema.methods.findContactByName = async function (name) {
   for (const contact of this.contacts) {
-    if(contact.name === name) {
+    if (contact.name === name) {
       return contact.toJSON()
+    }
+  }
+  return null
+};
+UserSchema.methods.toggleFavorite = async function (name) {
+  for (const contact of this.contacts) {
+    if (contact.name === name) {
+      contact.favorite = contact.favorite ? false : true;
+      return this.save();
     }
   }
   return null
