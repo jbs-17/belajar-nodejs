@@ -171,7 +171,15 @@ UserSchema.methods.deleteContactByName = async function (name) {
   return true;
 };
 
+UserSchema.methods.changePassword = async function (password) {
+  this.password = password;
+  return await this.save();
+}
 
+UserSchema.methods.changeEmail = async function (email) {
+  this.email = email;
+  return await this.save();
+}
 
 const User = mongoose.model('User', UserSchema);
 export default User;

@@ -3,6 +3,8 @@ import express from "express";
 import User from "../models/user.mjs";
 import jsonwebtoken from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
+import bcrypt from "bcryptjs";
+
 
 
 
@@ -336,29 +338,96 @@ signedIn.get('/search', (req, res, next) => {
 });
 
 
+
+const validatePassword = [
+  verifySignIn,
+  body('password-old', 'old password invalid!').isLength({ 'min': 8, 'max': 999 }).isString().trim(),
+  body('password-new', 'new password invalid!').isLength({ 'min': 8, 'max': 999 }).isString().trim(),
+  body('password-new-confirmation', 'new password invalid!').custom((value, { req }) => {
+    return value === req.body['password-new']
+  }).withMessage('new password and the confirmation dosnot match!').trim()
+];
 signedIn.route('/password')
-.get(verifySignIn, (req, res)=>{
-  res.render("password", {
-    ...layout,
-    title: "Password",
+  .get(verifySignIn, (req, res) => {
+    let info = req.flash('info');
+    let error = req.flash('error');
+    res.render("password", {
+      ...layout,
+      title: "Password",
+      info,
+      error
+    });
+  })
+  .patch(validatePassword, async (req, res) => {
+    try {
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        throw result.array()[0]?.msg || 'invalid input!';
+      }
+      const auth = await bcrypt.compare(req.body["password-old"], req.user.password);
+      if (auth === false) {
+        req.flash('error', 'invalid authentication! wrong password!');
+        return res.redirect('/password');
+      }
+      const newPasword = await bcrypt.hash(req.body['password-new'], 10);
+      await req.user.changePassword(newPasword);
+      req.flash('info', 'succes to change password');
+      res.redirect('/password');
+    } catch (error) {
+      console.log(error);
+      req.flash('error', error.message || error || 'change password error!');
+      res.redirect('/password');
+    }
   });
-})
-.patch(verifySignIn, (req,res)=>{
-
-});
 
 
+const validateEmail = [
+  verifySignIn,
+  body('email-old', ' invalid email format!').isEmail().isLength({ 'min': 3, 'max': 999 }).isString().trim(),
+  body('email-new', 'invalid email format!').isEmail().isLength({ 'min': 3, 'max': 999 }).isString().trim(),
+  body('password', 'invalid password format!').isLength({ 'min': 8, 'max': 999 }).isString().trim(),
+];
 signedIn.route('/email')
-.get((req,res)=>{
-  res.render("email", {
-    ...layout,
-    title: "Email",
+  .get(verifySignIn, (req, res) => {
+    let info = req.flash('info');
+    let error = req.flash('error');
+    res.render("email", {
+      ...layout,
+      title: "Email",
+      info,
+      error
+    });
+  })
+  .patch(validateEmail, async (req, res) => {
+    try {
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        throw result.array()[0]?.msg || 'invalid input!';
+      }
 
+      const authEmail = req.user.email === req.body['email-old'];
+      if (authEmail === false) {
+        req.flash('error', 'invalid authentication! invalid credential: email!');
+        return res.redirect('/email');
+      }
+
+      const authPassword = await bcrypt.compare(req.body["password"], req.user.password);
+      if (authPassword === false) {
+        req.flash('error', 'invalid authentication! invalid credential: password!');
+        return res.redirect('/email');
+      }
+
+      await req.user.changeEmail(req.body['email-new']);
+      req.flash('info', 'succes to change email');
+      res.redirect('/email');
+    } catch (error) {
+      req.flash('error', error.code === 11000 ? 'cannot use new email! email has been used!' : error.message || error || 'change email error!');
+      res.redirect('/email');
+    }
   });
-})
-.patch((req,res)=>{
 
-})
+
+
 
 
 export { signedIn, verifySignIn }
