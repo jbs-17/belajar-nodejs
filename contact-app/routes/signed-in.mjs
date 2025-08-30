@@ -258,7 +258,7 @@ signedIn.get('/contacts', verifySignIn, async (req, res) => {
   let { sort, filter, page } = req.query;
   try {
     //cek page int valid bukan
-    page = parseInt(page)
+    page = parseInt(page);
     if (page !== 0 && isNaN(page)) {
       return res.redirect('/contacts?page=0');
     };
@@ -266,7 +266,7 @@ signedIn.get('/contacts', verifySignIn, async (req, res) => {
     //tentukan page yang tersedia 
     let contacts = req.user.sortContactsBy(sort);
     const contactLength = contacts.length;
-    let totalPage = parseInt((contactLength-1) / contactsPerPage);
+    let totalPage = parseInt((contactLength - 1) / contactsPerPage);
     if (contacts.length < 10) {
       totalPage = 0;
     };
@@ -288,8 +288,40 @@ signedIn.get('/contacts', verifySignIn, async (req, res) => {
 });
 
 
+const isStringIncludes = (what = '') => string => `${string}`.toLowerCase().includes(what.toLowerCase());
+const excecptedField = ['_id', 'favorite', 'priority', 'updatedAt'];
+signedIn.get('/search', (req, res, next) => {
+  let { q, page } = req.query;
+  try {
+    if (page === undefined) {
+      page = 0
+    }
+    page = parseInt(page);
+    if (page !== 0 && isNaN(page)) {
+      return res.redirect('/search?q=&page=0');
+    };
+    const contacts = req.user.toJSON().contacts;
+    const result = contacts.filter(contact => {
 
+      return Object.keys(contact).filter(key => !excecptedField.includes(key)).some(isStringIncludes(q)) || Object.values(contact).some(isStringIncludes(q));
+    });
+    let resultLength = result.length;
+    let totalPage = parseInt((resultLength - 1) / contactsPerPage);
+    res.render("search", {
+      ...layout,
+      q,
+      title: "Contact List",
+      totalPage,
+      page,
+      theme: req.theme,
+      result,
 
+    });
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
+})
 
 
 
