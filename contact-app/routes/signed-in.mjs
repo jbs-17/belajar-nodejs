@@ -2,7 +2,8 @@ import config from "../config.mjs";
 import express from "express";
 import User from "../models/user.mjs";
 import jsonwebtoken from 'jsonwebtoken';
-import ejs from 'ejs';
+import { body, validationResult } from 'express-validator';
+
 
 
 const contactsPerPage = 10;
@@ -71,6 +72,11 @@ signedIn.get('/settings', verifySignIn, async (req, res) => {
   });
 });
 
+
+
+
+
+
 //
 signedIn.get('/contact/add', verifySignIn, async (req, res) => {
   let formData = req.flash('formData')[0] || '';
@@ -96,11 +102,24 @@ signedIn.get('/contact/add', verifySignIn, async (req, res) => {
 });
 
 
+const validateFormData = [
+  verifySignIn,
+  body('name', 'name invalid!').trim().notEmpty(),
+  body('priority', 'invalid priority number! allowed 0-100').custom(value => {
+    value = parseInt(value);
+    return !isNaN(value) && value <= 100 && value >= 0;
+  })
+]
 
-signedIn.post('/contact/add', verifySignIn, async (req, res, formData) => {
+signedIn.post('/contact/add', validateFormData, async (req, res, formData) => {
   const contact = createContact(req.body);
   try {
-    const { name } = req.body;
+    console.log(req.body);
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      throw new Error('input invalid!')
+    };
+    let { name } = req.body;
     formData = req.body;
     await req.user.addContact(contact);
     req.flash('info', `Contact named ${name} added!`);
@@ -110,7 +129,7 @@ signedIn.post('/contact/add', verifySignIn, async (req, res, formData) => {
       req.flash('error', 'error: ' + error.message);
       req.flash('formData', JSON.stringify(formData));
     } else {
-      req.flash('error', 'Error to add contact! pleasesa input valid form!');
+      req.flash('error', 'Error to add contact! please input valid form!');
     }
     res.redirect('/contact/add');
   }
@@ -247,12 +266,7 @@ signedIn.route('/contact/edit/:nameId')
 
 
 
-const sorts = [
-  'newest',
-  'oldest',
-  'favorite',
-  'name-asc'
-]
+
 //PATCH edit satu kontak
 signedIn.get('/contacts', verifySignIn, async (req, res) => {
   let { sort, filter, page } = req.query;
@@ -289,7 +303,7 @@ signedIn.get('/contacts', verifySignIn, async (req, res) => {
 
 
 const isStringIncludes = (what = '') => string => `${string}`.toLowerCase().includes(what.toLowerCase());
-const excecptedField = ['_id', 'favorite', 'priority', 'updatedAt'];
+const excecptedField = ['_id', 'favorite', 'priority', 'updatedAt', 'createdAt'];
 signedIn.get('/search', (req, res, next) => {
   let { q, page } = req.query;
   try {
@@ -315,14 +329,36 @@ signedIn.get('/search', (req, res, next) => {
       page,
       theme: req.theme,
       result,
-
     });
   } catch (error) {
-    console.log(error);
     next(error)
   }
-})
+});
 
+
+signedIn.route('/password')
+.get(verifySignIn, (req, res)=>{
+  res.render("password", {
+    ...layout,
+    title: "Password",
+  });
+})
+.patch(verifySignIn, (req,res)=>{
+
+});
+
+
+signedIn.route('/email')
+.get((req,res)=>{
+  res.render("email", {
+    ...layout,
+    title: "Email",
+
+  });
+})
+.patch((req,res)=>{
+
+})
 
 
 export { signedIn, verifySignIn }

@@ -81,8 +81,7 @@ const isSignedIn = async (req, res, next) => {
     req.theme = user.settings.theme;
     next();
     // console.log(req.user.settings);
-  } catch (e){
-    console.log(e);
+  } catch{
     next();
   }
 };

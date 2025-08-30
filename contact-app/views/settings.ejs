@@ -66,15 +66,15 @@
                     <p class="card-text">
                       <%= settings.theme %>
                     </p>
-                    <div class="d-grid gap-2">
-                      <form method="get" action="/settings">
+
+                      <form class="d-grid gap-2" method="get" action="/settings">
                         <input hidden type="search" name="theme"
                           value="<%= settings.theme === 'default' ? 'dark' : 'default' %>">
                         <button type="submit" class="btn btn-primary btn-sm">
                           Change to <%= settings.theme==='default' ? 'Dark' : 'Default' %> Theme
                         </button>
                       </form>
-                    </div>
+
                   </div>
                 </div>
               </div>

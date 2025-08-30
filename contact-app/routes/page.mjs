@@ -2,7 +2,7 @@ import express from "express";
 import User from '../models/user.mjs';
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
-import { body, validationResult, check, } from 'express-validator';
+import { body, validationResult,  } from 'express-validator';
 import config from "../config.mjs";
 
 const page = express.Router();

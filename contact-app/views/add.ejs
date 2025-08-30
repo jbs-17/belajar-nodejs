@@ -170,11 +170,11 @@
 
                   <li class="list-group-item border-bottom border-top p-3" fieldchild="0">
                     <div class="row g-4">
-                      <div class="col-5">
+                      <div class="col-12 col-md-6">
                         <input type="text" class="form-control rounded-0 fw-bold" placeholder="Field Name"
                           aria-label="Field Name" name="field-0">
                       </div>
-                      <div class="col-5">
+                      <div class="col-12 col-md-6">
                         <input type="text" class="form-control rounded-0 fw-bold" placeholder="Value" aria-label="Value"
                           name="value-0">
                       </div>
@@ -182,8 +182,8 @@
                   </li>
 
                   <li class="list-group-item">
-                    <button id="add-field-btn" class="btn btn-primary btn-sm" type="button">Add New Field +</button>
-                    <button class="btn btn-dark btn-sm border border-1 border-white" type="submit">Save Contact</button>
+                    <button id="add-field-btn" class="btn btn-primary btn-sm m-1 col" type="button">Add New Field +</button>
+                    <button class="btn btn-dark btn-sm border border-1 border-white m-1 col" type="submit">Save Contact</button>
                   </li>
 
                   <script>
@@ -201,11 +201,11 @@
                       fieldchild.setAttribute('fieldchild', length);
                       fieldchild.innerHTML = `
                       <div class="row g-4">
-                        <div class="col-5">
+                        <div class="col-12 col-md-6">
                           <input oninput="saveForm()" type="text" class="form-control rounded-0 fw-bold" placeholder="Field Name"
                             aria-label="Field Name" name="field-${length}">
                         </div>
-                        <div class="col-5">
+                        <div class="col-12 col-md-6">
                           <input oninput="saveForm()" type="text" class="form-control rounded-0 fw-bold" placeholder="Value"
                             aria-label="Value" name="value-${length}">
                         </div>
@@ -251,7 +251,6 @@
                           return inp.value = value
                         };
                         if (key.includes('field-')) {
-                          console.log({ key, value });
                           newField();
                           const inp = document.querySelector(`[name=${key}]`);
                           inp.value = value
