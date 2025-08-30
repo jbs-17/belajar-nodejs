@@ -10,9 +10,15 @@
       </strong>!
       Here is a dashboard menu to manage your contact!
     </p>
-    <hr/>
+    <hr>
+    
+    <%- include('./partials/nav-signedin.ejs') %>
+    
+      <hr>
 
   </div>
+
+  
   
       <% if (signedIn.length) { %>
       <div class="alert alert-info">
@@ -130,7 +136,7 @@
   <div class="row g-4 mb-4">
     <div class="col-12">
       <div class="card shadow-sm">
-        <div class="card-header bg-white border-bottom">
+        <div class="card-header bg-secondary border-bottom">
           <h5 class="card-title mb-0">
             <i class="fas fa-bolt text-warning me-2"></i>
             Quick Actions
@@ -140,13 +146,13 @@
           <div class="row g-3">
 
             <div class="col-md-3">
-              <a href="/contact/create" class="btn btn-primary w-100 py-3">
+              <a href="/contact/add" class="btn btn-primary w-100 py-3">
                 <i class="fas fa-user-plus fa-2x d-block mb-2"></i>
                 <span class="fw-semibold">Add Contact</span>
               </a>
             </div>
             <div class="col-md-3">
-              <button class="btn btn-danger w-100 py-3" onclick="importContacts()">
+              <button class="btn btn-warning w-100 py-3" onclick="importContacts()">
                 <i class="fas fa-file-import fa-2x d-block mb-2"></i>
                 <span class="fw-semibold">Import Contacts</span>
               </button>
@@ -159,10 +165,10 @@
             </div>
 
             <div class="col-md-3">
-              <button class="btn btn-secondary w-100 py-3" onclick="exportContacts()">
+              <a href="/settings" class="btn btn-dark border-1 border-light w-100 py-3" onclick="exportContacts()">
                 <i class="fas fa-download fa-2x d-block mb-2"></i>
                 <span class="fw-semibold">Settings</span>
-              </button>
+              </a>
             </div>
 
 

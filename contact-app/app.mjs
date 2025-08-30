@@ -9,6 +9,9 @@ import rateLimit from 'express-rate-limit';
 import page from "./routes/page.mjs";
 import {signedIn,verifySignIn } from "./routes/signed-in.mjs";
 import path from 'node:path';
+import methodOverride from 'method-override';
+import jsonwebtoken from "jsonwebtoken";
+import User from "./models/user.mjs";
 
 const {layout} = config;
 
@@ -27,6 +30,7 @@ app.set("views", "views/");
 app.use(expressLayouts);
 app.use(cookieParser());
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -60,6 +64,31 @@ app.get('/loading', (req, res)=>{
   });
   
 });
+
+
+
+const isSignedIn = async (req, res, next) => {
+  const { sign_in_token } = req.cookies;
+  try {
+    const verify = jsonwebtoken.verify(sign_in_token, process.env.JWT_SECRET);
+    const { id } = verify;
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Error('User not found!');
+    }
+    req.user = user
+    req.userData = user.toJSON();
+    req.theme = user.settings.theme;
+    next();
+    // console.log(req.user.settings);
+  } catch (e){
+    console.log(e);
+    next();
+  }
+};
+
+
+app.use(isSignedIn);
 app.use('/', page);
 app.use('/', signedIn);
 
@@ -67,6 +96,7 @@ app.use('/', signedIn);
 app.use((req, res) => {
   res.status(404).render("404", {
     ...layout,
+    theme: req.theme,
     title: path.basename(req.path),
     path: req.path,
     referer: req.headers.referer || '/home'
@@ -78,6 +108,7 @@ app.use((err, req, res, next) => {
   console.error(err.message);
   res.status(500).render("error.ejs", {
     ...layout,
+    theme: req.theme,
     title: "Server Error",
     error: err,
     stack: err.stack?.split('\n')

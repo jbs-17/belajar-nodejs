@@ -1,15 +1,21 @@
-<div class="container-lg p-3 mt-3">
+<div class="container-lg p-lg-3 mt-3">
 
   <div class="mb-4 p-3">
-    <h1 class="h3 h-md-1 fw-bold text-primary">
+    <h1 class="display-6 fw-bold text-primary">
       <% name %> Contact Details
     </h1>
     <p class="lead text-muted m-1">
-      Your contact named <strong class="fw-bold">
-        <%= name %>
-      </strong> detailed herew
+      Your contact with name<strong class="fw-bold">
+        <%= name %>'s
+      </strong> details
     </p>
+    
     <hr>
+    
+    <%- include('./partials/nav-signedin.ejs') %>
+    
+    <hr>
+    
 
     <% if (info.length) { %>
       <div class="alert alert-success" role="alert">
@@ -65,7 +71,7 @@
               <label for="priority" class="fw-bold col-12 col-md-2 col-form-label text-uppercase">Created At</label>
               <div class="col-12 col-md-10">
                 <input value="<%= createdAt %>" type="text" min="0" max="100" name="priority" id="priority"
-                  class="form-control rounded-0 fw-bold text-uppercase" readonly>
+                  class="form-control rounded-0 fw-bold text-uppercase" readonly disabled>
               </div>
             </div>
 
@@ -73,7 +79,7 @@
               <label for="priority" class="fw-bold col-12 col-md-2 col-form-label text-uppercase">Updated At</label>
               <div class="col-12 col-md-10">
                 <input value="<%= updatedAt %>" type="text" min="0" max="100" name="priority" id="priority"
-                  class="form-control rounded-0 fw-bold text-uppercase" readonly>
+                  class="form-control rounded-0 fw-bold text-uppercase" readonly disabled>
               </div>
             </div>
 
@@ -96,11 +102,11 @@
                       <div class="row g-3">
                         <div class="col-12 col-md-6">
                           <input value="<%= field %>" type="text" class="form-control rounded-0 fw-bold"
-                            placeholder="Field Name" aria-label="Field Name" name="field-0" readonly>
+                            placeholder="Field Name" aria-label="Field Name" name="field-0" readonly disabled>
                         </div>
                         <div class="col-12 col-md-6">
                           <input value="<%= value %>" type="text" class="form-control rounded-0 fw-bold"
-                            placeholder="Value" aria-label="Value" name="value-0" readonly>
+                            placeholder="Value" aria-label="Value" name="value-0" readonly disabled>
                         </div>
                       </div>
                     </li>
@@ -108,12 +114,19 @@
                     <% }) %>
 
                       <li class="list-group-item">
-                        <button class="btn btn-danger btn-sm m-1" type="submit">Delete</button>
-                        <button class="btn btn-dark btn-sm m-1" type="submit">Edit</button>
-                        <button id="add-field-btn" class="btn btn-primary btn-sm m-1" type="button">Print as
+                        <form action="/contact/<%= name %>?_method=DELETE" method="post" hidden id="DELETE"></form>
+
+                        <button class="btn btn-danger btn-sm m-1" type="submit"
+                          onclick="if(!confirm('Delete contact?')) event.preventDefault();" form="DELETE">
+                          Delete
+                        </button>
+                        <button id="add-field-btn" class="btn btn-primary btn-sm m-1" type="button">Download as
                           Image</button>
-                        <button id="add-field-btn" class="btn btn-warning btn-sm m-1" type="button">Download
-                          JSON</button>
+                          <button id="add-field-btn" class="btn btn-warning btn-sm m-1" type="button">Download
+                            JSON</button>
+                            <a href="/contact/edit/<%= name %>">
+                              <button class="btn btn-dark btn-sm m-1  border border-1 border-white" type="button">Edit Contact</button>
+                            </a>
                       </li>
 
 

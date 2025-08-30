@@ -89,29 +89,91 @@ UserSchema.methods.sortContactsBy = function (criteria = 'newest') {
   const contacts = [...this.contacts];
   switch (criteria) {
     case 'newest':
-      return contacts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      return contacts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); //
     case 'oldest':
-      return contacts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      return contacts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); //
     case 'name-asc':
-      return contacts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      return contacts.sort((a, b) => (a.name || '').localeCompare(b.name || '')); // 
     case 'name-desc':
-      return contacts.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+      return contacts.sort((a, b) => (b.name || '').localeCompare(a.name || '')); //
     case 'updated-newest':
-      return contacts.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      return contacts.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)); //
     case 'updated-oldest':
-      return contacts.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+      return contacts.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt)); //
     case 'favorite-first':
-      return contacts.sort((a, b) => (b.favorite === true) - (a.favorite === true));
+      return contacts.sort((a, b) => (b.favorite === true) - (a.favorite === true)); //
     case 'priority-high':
-      return contacts.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+      return contacts.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)); // b - a kalau minus b kiri kanan a
     case 'priority-low':
-      return contacts.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+      return contacts.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0)); // a - b kalau minus a kiri kanan b
     default:
       return contacts;
   }
 };
 
 
+const protectedKeys = ['_id', 'name', 'favorite', 'priority', 'createdAt', 'updatedAt'];
+UserSchema.methods.patchContact = async function (id, formData) {
+  // 1. Cari contact berdasarkan _id
+  const contact = this.contacts.id(id);
+  if (!contact) {
+    throw new Error('Contact not found.');
+  }
+
+  // 2. Cek apakah nama bentrok (kalau name disertakan dalam update)
+  if (formData.name) {
+    const isDuplicate = this.contacts.some(c =>
+      c._id.toString() !== id.toString() &&
+      c.name === formData.name
+    );
+    if (isDuplicate) {
+      throw new Error('Contact name already used by another contact! Use another name.');
+    }
+  };
+
+  // 3. Update semua field dari formData ke contact (kecuali _id);
+  // Kunci tetap yang tidak boleh dihapus
+
+  // Hapus field dinamis lama (selain yang dilindungi)
+  for (const key of Object.keys(contact.toObject())) {
+    if (!protectedKeys.includes(key)) {
+      contact.set(key, undefined, { strict: false }); // cara aman hapus field di Mongoose
+    }
+  }
+
+  // Update field dari formData
+  for (const key in formData) {
+    if (key === '_id') continue;
+
+    let value = formData[key];
+
+    // Tangani parsing khusus
+    if (key === 'priority') {
+      const parsed = parseInt(value);
+      if (!isNaN(parsed)) value = parsed;
+    }
+
+    if (key === 'favorite') {
+      value = Boolean(value);
+    }
+
+    contact.set(key, value, { strict: false }); // masukkan data ke contact
+  }
+
+  // 4. Simpan perubahan
+  await this.save();
+  return contact.toJSON();
+};
+
+UserSchema.methods.deleteContactByName = async function (name) {
+  this.contacts = this.contacts.filter(contact => contact.name !== name);
+  await this.save();
+  return true;
+};
+
+
 
 const User = mongoose.model('User', UserSchema);
 export default User;
+
+const u = new User();

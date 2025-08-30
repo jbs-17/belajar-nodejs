@@ -13,17 +13,24 @@ const { layout } = config;
 //GET
 //halaman utama
 
+
+
+
+page.use((req,res, next)=>{
+  req.apakah = 'ya berpengaruh pada prefiks yang sama'
+  next()
+})
 page.get("/", (req, res) => {
-  res.render("index", { ...layout, title: "Home" });
+  res.render("index", { ...layout, title: "Home", theme: req.theme });
 });
 
 page.get('/about', (req, res)=>{
-  res.render("about", { ...layout, title: "About" });
+  res.render("about", { ...layout, title: "About", theme: req.theme });
 })
 
 //halaman sign-up atau daftar akun
 page.get("/sign-up", (req, res) => {
-  return res.render('sign-up', { ...layout, title: 'Sign Up', msg: {}, error: null, email: null });
+  return res.render('sign-up', { ...layout, title: 'Sign Up', msg: {}, error: null, email: null, theme: req.theme });
 });
 
 //halaman sign-in atau login
@@ -34,6 +41,7 @@ page.get("/sign-in", (req, res) => {
     signUp: req.flash('sign-up'),
     email: req.flash('email'),
     signedIn: req.flash('signedIn')
+    , theme: req.theme
   });
 });
 page.get('/sign-in/verfify', async (req, res) => {
@@ -68,7 +76,7 @@ page.post("/sign-in", validateSignIn, async (req, res) => {
   const result = validationResult(req);
   const { email, password, remember } = req.body;
   if (!result.isEmpty()) {
-    return res.render('sign-in', { signedIn: '', signUp: '', title: 'Sign In', ...layout, msg: { false: 'Sign In failed!' }, error: result.array(), email });
+    return res.render('sign-in', { signedIn: '', signUp: '', title: 'Sign In', ...layout, theme: req.theme, msg: { false: 'Sign In failed!' }, error: result.array(), email });
   };
   try {
     if (!process.env.JWT_SECRET) {
@@ -106,7 +114,7 @@ page.post("/sign-in", validateSignIn, async (req, res) => {
     req.flash('sign-in', 'Sign In succesfuly, Welcome!');
     return res.redirect('/dashboard');
   } catch (error) {
-    return res.render('sign-in', { signedIn: '', signUp: '', title: 'Sign In', ...layout, msg: { false: 'Sign In failed!' }, error: [{ path: 'email', msg: error.message }, { path: 'password', msg: '' }], email });
+    return res.render('sign-in', { signedIn: '', signUp: '', title: 'Sign In', ...layout,theme: req.theme, msg: { false: 'Sign In failed!' }, error: [{ path: 'email', msg: error.message }, { path: 'password', msg: '' }], email });
   }
 });
 
@@ -130,8 +138,7 @@ const validateSignUp = [
 page.post("/sign-up", validateSignUp, async (req, res) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    console.log(result.array());
-    return res.render('sign-up', { ...layout, title: '', msg: { false: 'Sign Up falied' }, error: result.array(), ...req.body });
+    return res.render('sign-up', { ...layout,theme: req.theme,title: '', msg: { false: 'Sign Up falied' }, error: result.array(), ...req.body });
   }
   const { password, email } = req.body;
   req.body.password = await bcrypt.hash(password, 10);
@@ -139,11 +146,10 @@ page.post("/sign-up", validateSignUp, async (req, res) => {
   try {
     const save = await user.save();
   } catch (error) {
-    console.log(error);
     if (error.message?.includes('duplicate')) {
       error = [{ msg: 'email has been registered', path: 'email' }]
     }
-    return res.render('sign-up', { ...layout, title: '', msg: { false: 'Sign Up falied \n' }, error, email });
+    return res.render('sign-up', { ...layout, theme: req.theme, title: '', msg: { false: 'Sign Up falied \n' }, error, email });
   }
 
   req.flash('email', email);

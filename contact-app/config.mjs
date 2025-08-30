@@ -12,7 +12,8 @@ const config = {
     layout: "./layouts/layout.ejs",
     msg: {},
     script: null,
-    error: []
+    error: [],
+    theme:"light"
   },
 };
 export default Object.freeze(config);
