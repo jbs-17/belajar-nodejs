@@ -91,6 +91,10 @@ app.use(isSignedIn);
 app.use('/', page);
 app.use('/', signedIn);
 
+app.get('/test', (req, res) => {
+  res.end('/test')
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).render("404", {
