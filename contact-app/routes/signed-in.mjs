@@ -59,9 +59,9 @@ signedIn.get("/dashboard", verifySignIn, async (req, res) => {
       totalContacts++;
       if (contact.favorite === true) favoriteTotal++;
 
-      if(recentContact == null){
+      if (recentContact == null) {
         recentContact = contact;
-      }else{
+      } else {
         const current = new Date(recentContact.updatedAt), next = new Date(contact.updatedAt);
         recentContact = current > next ? recentContact : contact;
       }
@@ -173,15 +173,21 @@ signedIn.post('/contact/add', validateFormData, async (req, res, formData) => {
 
 
 //READ lihat detail kontak
+signedIn.patch('/contact/:nameId/favorite', async (req, res) => {
+  try {
+    const { nameId } = req.params;
+    if (nameId == null) throw Error('Contact name undefined');
+    req.user.toggleFavorite(nameId);
+    return res.json({ status: true });
+  } catch (error) {
+    return res.json({ status: false, error });
+  }
+})
 signedIn.get('/contact/:nameId', verifySignIn, async (req, res, namex) => {
   const info = req.flash('info')[0] || '';
-  const { favorite: f } = req.query;
   const { nameId } = req.params;
   namex = nameId;
   try {
-    if (f) {
-      return req.user.toggleFavorite(nameId);
-    }
     let { _id, favorite, priority, createdAt, updatedAt, name, ...fields } = await req.user.findContactByName(nameId);
     fields = Object.entries(fields);
     const data = {
@@ -387,7 +393,8 @@ signedIn.route('/password')
       ...layout,
       title: "Password",
       info,
-      error
+      error,
+      theme: req.theme,
     });
   })
   .patch(validatePassword, async (req, res) => {
@@ -427,7 +434,8 @@ signedIn.route('/email')
       ...layout,
       title: "Email",
       info,
-      error
+      error,
+      theme: req.theme,
     });
   })
   .patch(validateEmail, async (req, res) => {
@@ -527,7 +535,8 @@ signedIn.route('/contacts/import')
       ...layout,
       title: "Import Contacts",
       info,
-      error
+      error,
+      theme: req.theme,
     });
   })
   .post(verifySignIn, uploadFile.single('file'), async (req, res, next) => {
@@ -558,6 +567,86 @@ signedIn.route('/contacts/import')
     }
   });
 
+
+signedIn.route('/user/reset')
+  .get(verifySignIn, (req, res) => {
+    let info = req.flash('info');
+    let error = req.flash('error');
+    res.render("reset", {
+      ...layout,
+      title: "Reset Contacts",
+      info,
+      error,
+      theme: req.theme,
+    });
+  })
+  .put(verifySignIn, async (req, res) => {
+    const { sure } = req.body;
+    if (!sure) {
+      req.flash('error', "Failed to reset account! you does not check the sure checkbox!")
+      return res.redirect('/user/reset');
+    }
+    try {
+      await req.user.resetUser();
+      req.flash('info', 'Succes reset account!')
+      return res.redirect('/user/reset');
+    } catch (error) {
+      req.flash('error', "Failed to reset account! internal server erro!");
+      return res.redirect('/user/reset');
+    }
+  });
+
+
+
+signedIn.route('/user/delete')
+  .get(verifySignIn, (req, res) => {
+    let info = req.flash('info');
+    let error = req.flash('error');
+    res.render("delete", {
+      ...layout,
+      title: "Delete Account",
+      info,
+      error,
+      theme: req.theme,
+    });
+  })
+  .delete([verifySignIn,
+    body('email', 'invalid email format!').isEmail().trim(),
+    body('password', 'invalid password format!').isLength({ 'min': 8, 'max': 999 }).trim()
+  ], async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      req.flash('error', result.array()[0].msg);
+      return res.redirect('/user/delete');
+    }
+    const { sure, email, password } = req.body;
+    if (!sure) {
+      req.flash('error', "Failed to delete account! you does not check the sure checkbox!")
+      return res.redirect('/user/reset');
+    };
+
+    try {
+      // await req.user.resetUser();
+      req.flash('info', 'Succes reset account!')
+      return res.redirect('/user/reset');
+    } catch (error) {
+      req.flash('error', "Failed to delete account! internal server erro!");
+      return res.redirect('/user/reset');
+    }
+  });
+
+function oneTimeEndPoint(){
+  
+}
+
+function temporayEndPointMaker(prefix, id, handler, expiresInSeconds = 60) {
+  const temp = {};
+  return function () {
+    setTimeout(() => {
+      delete temp[id];
+    });
+  }
+}
 
 
 export { signedIn, verifySignIn }
