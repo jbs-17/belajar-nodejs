@@ -4,7 +4,7 @@ import User from "../models/user.mjs";
 import jsonwebtoken from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import bcrypt from "bcryptjs";
-import {oneTimePageFactory} from '../utils/onetimepagefactory.mjs';
+import { oneTimePageFactory } from '../utils/onetimepagefactory.mjs';
 
 
 const contactsPerPage = 10;
@@ -469,6 +469,7 @@ signedIn.route('/email')
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 import multer from "multer";
+import { randomUUID } from "node:crypto";
 
 signedIn.get('/contacts/export', verifySignIn, async (req, res, next) => {
   try {
@@ -595,9 +596,11 @@ signedIn.route('/user/reset')
     }
   });
 
-export const root1 = express.Router();
-const createOTPage = oneTimePageFactory(root1,'get', '/info', {redirect: '/sign-in'});
 
+
+
+export const root1 = express.Router();
+const createOTPage = oneTimePageFactory(root1, 'get', '/info', { redirect: '/' });
 signedIn.route('/user/delete')
   .get(verifySignIn, (req, res) => {
     let info = req.flash('info');
@@ -619,21 +622,38 @@ signedIn.route('/user/delete')
       req.flash('error', result.array()[0].msg);
       return res.redirect('/user/delete');
     }
+    const user = req.user?.toJSON?.();
     const { sure, email, password } = req.body;
+    if (email !== user.email) {
+      req.flash('error', 'Failed to delete account! Wrong email!');
+      return res.redirect('/user/delete');
+    }
+    if (await bcrypt.compare(password, user.password) === false) {
+      req.flash('error', 'Failed to delete account! Wrong password!');
+      return res.redirect('/user/delete');
+    }
     if (!sure) {
       req.flash('error', "Failed to delete account! you does not check the sure checkbox!")
-      return res.redirect('/user/reset');
+      return res.redirect('/user/delete');
     };
-
     try {
       const user = req.user;
       const uuid = randomUUID();
+      const deleteUser = await User.deleteOne({ _id: user.id });
+      console.log(deleteUser);
       req.flash('info', 'Succes delete account!');
-      const result = createOTPage(uuid, ()=>{
-        
-      })
+      const result = createOTPage(uuid, (req, res, next) => {
+        res.render('info', {
+          ...layout,
+          title: 'Account Deletion Info',
+          theme: req.theme,
+          ...user
+        })
+      });
+      res.cookie('sign_in_token', '', { expires: 0 });
       return res.redirect(result);
     } catch (error) {
+      console.log(error);
       req.flash('error', "Failed to delete account! internal server error!");
       return res.redirect('/user/delete');
     }
