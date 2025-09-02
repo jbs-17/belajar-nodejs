@@ -4,8 +4,7 @@ import User from "../models/user.mjs";
 import jsonwebtoken from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import bcrypt from "bcryptjs";
-
-
+import {oneTimePageFactory} from '../utils/onetimepagefactory.mjs';
 
 
 const contactsPerPage = 10;
@@ -596,7 +595,8 @@ signedIn.route('/user/reset')
     }
   });
 
-
+export const root1 = express.Router();
+const createOTPage = oneTimePageFactory(root1,'get', '/info', {redirect: '/sign-in'});
 
 signedIn.route('/user/delete')
   .get(verifySignIn, (req, res) => {
@@ -626,27 +626,20 @@ signedIn.route('/user/delete')
     };
 
     try {
-      // await req.user.resetUser();
-      req.flash('info', 'Succes reset account!')
-      return res.redirect('/user/reset');
+      const user = req.user;
+      const uuid = randomUUID();
+      req.flash('info', 'Succes delete account!');
+      const result = createOTPage(uuid, ()=>{
+        
+      })
+      return res.redirect(result);
     } catch (error) {
-      req.flash('error', "Failed to delete account! internal server erro!");
-      return res.redirect('/user/reset');
+      req.flash('error', "Failed to delete account! internal server error!");
+      return res.redirect('/user/delete');
     }
   });
 
-function oneTimeEndPoint(){
-  
-}
 
-function temporayEndPointMaker(prefix, id, handler, expiresInSeconds = 60) {
-  const temp = {};
-  return function () {
-    setTimeout(() => {
-      delete temp[id];
-    });
-  }
-}
 
 
 export { signedIn, verifySignIn }
